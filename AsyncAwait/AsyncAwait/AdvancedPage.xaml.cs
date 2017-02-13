@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -76,5 +77,15 @@ namespace AsyncAwait
                 ProgressBarWithProgress.Progress = value;
             });
         }
+
+
+        private async void FromInternetClicked(object sender, EventArgs e)
+		{
+			ProgressBar.Progress = 0;
+			var client = new HttpClient();
+			FromInternetLabel.Text = "Ejecutando...";
+			var lorem = await client.GetStringAsync("http://loripsum.net/api/1/short/plaintext/prude");
+			FromInternetLabel.Text = lorem;
+		}
     }
 }

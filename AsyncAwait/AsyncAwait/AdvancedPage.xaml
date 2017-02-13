@@ -9,5 +9,7 @@
         <Button x:Name="ErrorButton" Text="Error" Clicked="ButtonClicked"></Button>
         <ProgressBar x:Name="ProgressBarWithProgress"></ProgressBar>
         <Button x:Name="ProgressButton" Text="Con progreso" Clicked="ProgressButtonClicked"></Button>
+        <Button x:Name="FromInternetButton" Text="Desde internet" Clicked="FromInternetClicked"></Button>
+        <Label x:Name="FromInternetLabel" HorizontalTextAlignment="Center" FontSize="Large" Text="..."></Label>
     </StackLayout>
 </ContentPage>
