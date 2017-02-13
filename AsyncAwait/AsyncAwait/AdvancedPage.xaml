@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="AsyncAwait.AdvancedPage">
+    <StackLayout>
+        <ProgressBar x:Name="ProgressBar"></ProgressBar>
+        <Label x:Name="TaskStatusLabel" HorizontalTextAlignment="Center" FontSize="Large" Text="Detenida"></Label>
+        <Button x:Name="CoolButton" Text="Ok" Clicked="ButtonClicked"></Button>
+        <Button x:Name="ErrorButton" Text="Error" Clicked="ButtonClicked"></Button>
+        <ProgressBar x:Name="ProgressBarWithProgress"></ProgressBar>
+        <Button x:Name="ProgressButton" Text="Con progreso" Clicked="ProgressButtonClicked"></Button>
+    </StackLayout>
+</ContentPage>
