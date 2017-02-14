@@ -8,64 +8,87 @@ using Xamarin.Forms;
 
 namespace AsyncAwait
 {
-    public partial class BasicPage : ContentPage
-    {
-        public BasicPage()
-        {
-            InitializeComponent();
-        }
+	public partial class BasicPage : ContentPage
+	{
+		public BasicPage()
+		{
+			InitializeComponent();
+		}
 
-        int clicks;
+		int clicks;
 
-        private async void ButtonClicked(object sender, EventArgs e)
-        {
-            if (sender == AsyncButton)
-            {
-                TaskStatusLabel.Text = "Tarea iniciada";
-                await EjecutaTareaAsincrona();
-                TaskStatusLabel.Text = "Tarea terminada";
-            }
-            else if (sender == NormalButton)
-            {
-                TaskStatusLabel.Text = "Tarea iniciada";
-                EjecutaTarea();
-                TaskStatusLabel.Text = "Tarea terminada";
-            }
-            else if (sender == CountButton)
-            {
-                CountButton.Text = "Clicks: " + (++clicks);
-            }
-        }
+		private void ButtonClicked(object sender, EventArgs e)
+		{
+			CountButton.Text = "Clicks: " + (++clicks);
+		}
 
-        void EjecutaTarea()
-        {
-            CountLabel.Text = "0";
-            ProgressBar.Progress = 0;
-            for (int i = 0; i < 100; i++)
-            {
-                Task.Delay(100).Wait(); // Retardo
-                CountLabel.Text = (i + 1).ToString();
-                ProgressBar.Progress = ((double)i + 1) / 100;
-            }
-        }
+		private void BlockingClicked(object sender, EventArgs e)
+		{
+			TaskStatusLabel.Text = "Tarea bloqueante iniciada";
+			EjecutaTarea();
+			TaskStatusLabel.Text = "Tarea bloqueante terminada";
+		}
 
-        async Task EjecutaTareaAsincrona()
-        {
-            
-            CountLabel.Text = "0";
-            ProgressBar.Progress = 0;
-            await Task.Factory.StartNew(() =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Task.Delay(100).Wait();
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        CountLabel.Text = (i + 1).ToString();
-                        ProgressBar.Progress = ((double)i + 1) / 100;
-                    });
-                }
-            });
-        }
-    }
+		void EjecutaTarea()
+		{
+			CountLabel.Text = "0";
+			ProgressBar.Progress = 0;
+			for (int i = 0; i < 100; i++)
+			{
+				Task.Delay(100).Wait(); // Retardo
+				CountLabel.Text = (i + 1).ToString();
+				ProgressBar.Progress = ((double)i + 1) / 100;
+			}
+		}
+
+		private void FireAndForgetClicked(object sender, EventArgs e)
+		{
+			TaskStatusLabel.Text = "Tarea f-a-f iniciada";
+			EjecutaTareaAsincrona();
+			TaskStatusLabel.Text = "Tarea f-a-f terminada";
+		}
+
+		void EjecutaTareaAsincrona()
+		{
+			CountLabel.Text = "0";
+			ProgressBar.Progress = 0;
+			Task.Run(() =>
+			{
+				for (int i = 0; i < 100; i++)
+				{
+					Task.Delay(100).Wait(); // Retardo
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						CountLabel.Text = (i + 1).ToString();
+						ProgressBar.Progress = ((double)i + 1) / 100;
+					});
+				}
+			});
+		}
+
+		private async void AsyncClicked(object sender, EventArgs e)
+		{
+			TaskStatusLabel.Text = "Tarea asíncrona iniciada";
+			await EjecutaTareaAsync();
+			TaskStatusLabel.Text = "Tarea asíncrona terminada";
+		}
+
+		async Task EjecutaTareaAsync()
+		{
+			CountLabel.Text = "0";
+			ProgressBar.Progress = 0;
+			await Task.Run(() =>
+			{
+				for (int i = 0; i < 100; i++)
+				{
+					Task.Delay(100).Wait(); // Retardo
+					Device.BeginInvokeOnMainThread(() =>
+					{
+						CountLabel.Text = (i + 1).ToString();
+						ProgressBar.Progress = ((double)i + 1) / 100;
+					});
+				}
+			});
+		}
+	}
 }

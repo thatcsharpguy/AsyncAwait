@@ -6,8 +6,9 @@
         <ProgressBar x:Name="ProgressBar"></ProgressBar>
         <Label x:Name="CountLabel" HorizontalTextAlignment="Center" FontSize="Large" Text="Count"></Label>
         <Label x:Name="TaskStatusLabel" HorizontalTextAlignment="Center" FontSize="Large" Text="Detenida"></Label>
-        <Button x:Name="AsyncButton" Text="Async" Clicked="ButtonClicked"></Button>
-        <Button x:Name="NormalButton" Text="Normal" Clicked="ButtonClicked"></Button>
+        <Button x:Name="NormalButton" Text="Blocking" Clicked="BlockingClicked"></Button>
+        <Button x:Name="FireAndForgetButton" Text="Fire and forget" Clicked="FireAndForgetClicked"></Button>
+        <Button x:Name="AsyncButton" Text="Async" Clicked="AsyncClicked"></Button>
         <Button x:Name="CountButton" Text="Clicks: 0" Clicked="ButtonClicked"></Button>
     </StackLayout>
 </ContentPage>
