@@ -6,7 +6,9 @@
         <ProgressBar x:Name="ProgressBar1"></ProgressBar>
         <ProgressBar x:Name="ProgressBar2"></ProgressBar>
         <Label x:Name="TaskStatusLabel" HorizontalTextAlignment="Center" FontSize="Large" Text="Detenida"></Label>
-        <Button x:Name="ParallelButton" Text="Run parallel" Clicked="ButtonClicked"></Button>
-        <Button x:Name="SequentialButton" Text="Run sequential" Clicked="ButtonClicked"></Button>
+        <!-- <Button x:Name="ParallelBlockingButton" Text="Run parallel (blocking)" Clicked="BlockingParallelClicked"></Button> -->
+        <Button x:Name="SequentialButton" Text="Run sequential" Clicked="SequentialClicked"></Button>
+        <Button x:Name="ParallelButton" Text="Run parallel" Clicked="ParallelClicked"></Button>
+        <Button x:Name="ParallelOneButton" Text="Run parallel (just one)" Clicked="ParallelOneClicked"></Button>
     </StackLayout>
 </ContentPage>
