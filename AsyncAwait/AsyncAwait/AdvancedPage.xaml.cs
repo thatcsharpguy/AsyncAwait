@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 using Xamarin.Forms;
@@ -14,78 +15,56 @@ namespace AsyncAwait
         public AdvancedPage()
         {
             InitializeComponent();
+
+
         }
 
-        private async void ButtonClicked(object sender, EventArgs e)
-        {
-            TaskStatusLabel.Text = "Tarea iniciada";
-            ProgressBar.Progress = 0;
-
-            var tarea = EjecutaTareaAsincrona();
-
-            if (sender == ErrorButton)
-            {
-                await tarea.ConfigureAwait(false);
-            }
-            else
-            {
-                await tarea;
-            }
-
-            TaskStatusLabel.Text = "Tarea terminada";
-        }
-
-        async Task EjecutaTareaAsincrona()
-        {
-            ProgressBar.Progress = 0;
-            await Task.Factory.StartNew(() =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Task.Delay(100).Wait();
-                    Device.BeginInvokeOnMainThread(() =>
-                    {
-                        ProgressBar.Progress = ((double)i + 1) / 100;
-                    });
-                }
-            });
-        }
-
-
-        async Task EjecutaTareaAsincrona(IProgress<double> progress)
-        {
-            await Task.Factory.StartNew(() =>
-            {
-                for (int i = 0; i < 100; i++)
-                {
-                    Task.Delay(100).Wait();
-                    progress.Report(((double)i + 1) / 100);
-                }
-            });
-        }
-
-        private async void ProgressButtonClicked(object sender, EventArgs e)
-        {
-            ProgressBar.Progress = 0;
-            await EjecutaTareaAsincrona(this);
-        }
-
-        public void Report(double value)
-        {
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                ProgressBarWithProgress.Progress = value;
-            });
-        }
-
-
-        private async void FromInternetClicked(object sender, EventArgs e)
+		public void Report(double value)
 		{
-			ProgressBar.Progress = 0;
-			var client = new HttpClient();
-			FromInternetLabel.Text = "Ejecutando...";
-			var lorem = await client.GetStringAsync("http://loripsum.net/api/1/short/plaintext/prude");
-			FromInternetLabel.Text = lorem;
+			Device.BeginInvokeOnMainThread(() => 
+			{
+				ProgressBar.Progress = value;
+				IntegerReport.Text = (value * 100).ToString();
+			});
 		}
+
+		CancellationTokenSource CancellationTokenSource;
+
+		async void StartTaskClicked(object sender, System.EventArgs e)
+		{
+			CancellationTokenSource = new CancellationTokenSource();
+			var task = UltraComplexLibrary.SlowTask(this, CancellationTokenSource.Token);
+			try
+			{
+				await task;
+			}
+			catch (OperationCanceledException op)
+			{
+				
+			}
+			finally
+			{
+				IntegerReport.Text = task.Status.ToString();
+			}
+		}
+
+
+		async void StartTimedTaskClicked(object sender, System.EventArgs e)
+		{
+			CancellationTokenSource = new CancellationTokenSource();
+			CancellationTokenSource.CancelAfter(3000);
+			var task = UltraComplexLibrary.SlowTask(this, CancellationTokenSource.Token);
+			await task;
+			if (task.Exception != null)
+			{
+				IntegerReport.Text = "Excepción";
+			}
+		}
+
+		void StopTaskClicked(object sender, System.EventArgs e)
+		{
+			CancellationTokenSource.Cancel();
+		}
+
     }
 }
